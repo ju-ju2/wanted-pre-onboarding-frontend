@@ -26,8 +26,8 @@ export default function TodoList({ data, getData }) {
       .catch((error) => console.log(error.response.data.message));
   };
   const onClickSubmit = async () => {
-    if (todo === data.todo && isCompleted === data.isCompleted) {
-      alert("변동사항이 없습니다.");
+    if (todo === data.todo) {
+      alert("변경사항이 없습니다.");
       return;
     }
     await axios
@@ -49,10 +49,11 @@ export default function TodoList({ data, getData }) {
   };
 
   const handleCheckbox = async () => {
+    setIsCompleted((prev) => !prev);
     axios
       .put(
         `https://www.pre-onboarding-selection-task.shop/todos/${id}`,
-        { todo, isCompleted: !isCompleted },
+        { todo: data.todo, isCompleted: !isCompleted },
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -99,7 +100,7 @@ export default function TodoList({ data, getData }) {
             <input
               type="checkbox"
               checked={isCompleted}
-              onChange={() => setIsCompleted((prev) => !prev)}
+              onChange={handleCheckbox}
             />
             <TodoEditInput
               defaultValue={data.todo}
